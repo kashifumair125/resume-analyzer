@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analyzer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #f4f4f4, #e0e0e0);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            background-image: url('path/to/your/background-image.jpg');
+            background-size: cover;
+        }
+
+        .main-content {
+            flex: 2;
+        }
+
+        .suggestions {
+            flex: 1;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-weight: 700;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        .custom-file-input {
+            position: relative;
+            display: inline-block;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .custom-file-input:hover {
+            background-color: #45a049;
+        }
+
+        .custom-file-input input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-name {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .result {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        .feedback-message {
+            color: #d9534f;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            width: 50px;
+            height: 50px;
+            animation: spin 1.5s linear infinite;
+            display: none;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .custom-dropdown select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            color: #333;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            appearance: none;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .custom-dropdown select:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .custom-dropdown::after {
+            content: '▼';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: #666;
+            pointer-events: none;
+        }
+
+        ul.suggestion-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul.suggestion-list li {
+            padding: 10px;
+            font-size: 14px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .missing-keywords {
+            color: #d9534f;
+            font-weight: bold;
+        }
+
+        .optional-keywords {
+            color: #f0ad4e;
+            font-style: italic;
+        }
+
+        .icon {
+            color: #5cb85c;
+            margin-right: 5px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                flex-direction: column;
+            }
+
+            button {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .custom-file-input {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        .card p {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="main-content">
+            <h1>Resume Analyzer</h1>
+            <form id="resumeForm" enctype="multipart/form-data">
+                <label for="resume">Resume (PDF):</label>
+                <div class="custom-file-input">
+                    <span>Select Resume</span>
+                    <input type="file" name="resume" id="resume" accept=".pdf" required>
+                </div>
+                <div class="file-name" id="fileName">No file chosen</div>
+
+                <label for="job_title">Job Title:</label>
+                <div class="custom-dropdown">
+                    <select id="job_title" name="job_title" required>
+                        <option value="">Select Job Title</option>
+                        <option value="java developer">Java Developer</option>
+                        <option value="data scientist">Data Scientist</option>
+                        <option value="frontend developer">Frontend Developer</option>
+                        <option value="backend developer">Backend Developer</option>
+                        <option value="full stack developer">Full Stack Developer</option>
+                        <option value="devops engineer">DevOps Engineer</option>
+                    </select>
+                </div>
+
+                <label for="job_description">Job Description:</label>
+                <textarea name="job_description" id="job_description" rows="5" aria-label="Job Description" required></textarea>
+
+                <button type="submit">Analyze</button>
+            </form>
+
+            <div class="loader" id="loader"></div>
+            <div class="result" id="result"></div>
+        </div>
+
+        <div class="suggestions">
+            <h2>Suggestions</h2>
+            <ul id="suggestions-list" class="suggestion-list">
+                <!-- Suggestions will appear here -->
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 Resume Analyzer. All rights reserved.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $('#resume').change(function() {
+            var file = this.files[0];
+            var maxSize = 5 * 1024 * 1024; // 5MB limit
+            if (file.size > maxSize) {
+                alert('File size exceeds 5MB');
+                $(this).val(''); // Reset file input
+                $('#fileName').text('No file chosen');
+            } else {
+                var fileName = file.name;
+                $('#fileName').text(fileName);
+            }
+        });
+
+        $('#resumeForm').on('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $('#loader').show();
+            $('#result').text('');
+            $('#suggestions-list').empty();
+
+            $.ajax({
+                url: '/upload', // Update this to your actual endpoint
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    $('#loader').hide();
+                    if (response.error) {
+                        $('#result').text(response.error);
+                    } else {
+                        $('#result').text(`Similarity Score: ${response.similarity_score}%`);
+                        $('#suggestions-list').html(response.suggestions);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $('#loader').hide();
+                    $('#result').text('An error occurred during analysis.');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
