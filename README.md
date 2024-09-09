@@ -2,7 +2,8 @@
 
 Resume Analyzer is a web application designed to help users assess how well their resume matches a job description. It provides a similarity score and offers suggestions for improving the resume to better align with the job requirements.
 
-![Screenshot of Resume Analyzer](assets/screenshot.png)
+![Screenshot of Resume Analyzer](screenshot.png)
+
 
 ## Features
 
